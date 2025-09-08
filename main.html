@@ -3,126 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selamat Datang di XVRIEZ</title>
+    <title>XVRIEZ - Interactive Layout (Emoji Weather)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #007bff;
-            --primary-hover: #0056b3;
-            --text-color: #ffffff;
-            --text-muted: rgba(255, 255, 255, 0.75);
-            --font-family: 'Poppins', sans-serif;
-            --border-radius: 12px;
+            --font-family: 'Poppins', 'Noto Sans JP', sans-serif;
+            --border-radius: 50px;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: var(--font-family);
-            color: var(--text-color);
-            /* Latar belakang gradien animasi yang dinamis */
-            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1c3d52);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background-image: url('https://media.discordapp.net/attachments/1114597382290681969/1414318468123197571/wallpaperflare.com_wallpaper_1.jpg?ex=68bf2237&is=68bdd0b7&hm=a58db960e27fbcc487d8406f7957f608790c30feb235968cc7e0599bdc123b47&=&');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+            overflow: hidden;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
             min-height: 100vh;
-            text-align: center;
         }
 
-        /* Animasi untuk latar belakang */
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .welcome-container {
+            width: 100%;
+            text-align: left;
+            padding-top: 100px;
+            padding-left: 8vw;
+            animation: fadeIn 1s ease-out;
+        }
+        .welcome-container h1 { font-size: 3.5rem; text-shadow: 2px 4px 8px rgba(0,0,0,0.7); }
+        .welcome-container h2 { font-size: 2rem; text-shadow: 2px 4px 8px rgba(0,0,0,0.7); }
+
+        .interactive-nav {
+            position: absolute;
+            bottom: 450px;
+            right: 1050px;
+            height: 100px;
+            width: 200px;
+            cursor: pointer;
         }
 
-        .hero-container {
-            max-width: 700px;
-            padding: 40px;
-            /* Efek fade-in saat halaman dimuat */
+        .link-button {
+            position: absolute;
+            padding: 15px 30px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+            background: rgba(15, 15, 25, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2.5px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: scale(0.5) translateY(50px);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .interactive-nav.triggered .link-button {
+            opacity: 1;
+            transform: scale(1) translateY(0) rotate(0deg);
+        }
+
+        .interactive-nav.triggered .link-button:nth-child(1) { transform: translateX(-150px) translateY(120px) rotate(-360deg); transition-delay: 0s; }
+        .interactive-nav.triggered .link-button:nth-child(2) { transform: translateX(-200px) translateY(-30px) rotate(-360deg); transition-delay: 0.05s; }
+        .interactive-nav.triggered .link-button:nth-child(3) { transform: translateX(0px) translateY(-150px) rotate(-360deg); transition-delay: 0.1s; }
+        .interactive-nav.triggered .link-button:nth-child(4) { transform: translateX(200px) translateY(-30px) rotate(-360deg); transition-delay: 0.05s; }
+        .interactive-nav.triggered .link-button:nth-child(5) { transform: translateX(150px) translateY(120px) rotate(-360deg); transition-delay: 0s; }
+
+        /* --- PERUBAHAN CSS DIMULAI DI SINI --- */
+
+        /* 1. Efek hover standar disederhanakan, hanya mengubah background & shadow */
+        .link-button:hover {
+            background: rgba(120, 80, 80, 0.9);
+            box-shadow: 0 10px 25px rgba(255, 180, 180, 0.2);
+            z-index: 10;
+        }
+
+        /* 2. Style :hover spesifik yang lama DIHAPUS. Sekarang digantikan oleh class .active di bawah */
+
+        /* 3. Style baru untuk class .active. Tombol yang aktif akan pindah ke tengah */
+        .interactive-nav.triggered .link-button.active {
+            transform: translateX(0px) translateY(-10px) rotate(-360deg) scale(1.25);
+            background: rgba(80, 120, 220, 0.9);
+            box-shadow: 0 10px 30px rgba(33, 103, 255, 0.4);
+            z-index: 20; /* Pastikan tombol aktif selalu di atas */
+            transition-delay: 0s !important;
+        }
+
+        /* --- PERUBAHAN CSS SELESAI --- */
+
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .info-widget {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(15, 15, 25, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 15px 25px;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+            font-weight: 400;
             animation: fadeIn 1s ease-out;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        h1 {
-            font-size: 4rem; /* Ukuran font dibuat jauh lebih besar */
+        #clock {
+            font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 16px;
-            line-height: 1.2;
-            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
         }
 
-        p {
-            font-size: 1.25rem;
-            font-weight: 400;
-            color: var(--text-muted);
-            margin-bottom: 32px;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-
-        .cta-button {
-            display: inline-flex;
+        #weather {
+            display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 16px 32px;
-            font-size: 1rem;
-            font-weight: 600;
-            color: white;
-            background-color: var(--primary-color);
-            border: none;
-            border-radius: var(--border-radius);
-            text-decoration: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-top: 5px;
         }
 
-        .cta-button:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.5);
+        #weather-icon-emoji {
+            font-size: 2.5rem;
+            margin-right: 15px;
+            line-height: 1;
         }
-
-        .cta-button svg {
-            transition: transform 0.3s ease;
-        }
-
-        .cta-button:hover svg {
-            transform: translateX(5px);
-        }
-
     </style>
 </head>
 <body>
 
-    <div class="hero-container">
-        <h1>Selamat Datang XVRIEZ</h1>
-        
-        <a href="my_assets.php" class="cta-button">
-            <span>Lihat Aset Saya</span>
-            <svg xmlns="http://www.w.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
-                <path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.49a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z"></path>
-            </svg>
-        </a>
+    <div class="welcome-container">
+        <h1>Selamat Datang</h1>
+        <h2>XVRIEZ</h2>
     </div>
+
+    <div class="interactive-nav">
+        <a href="portfolio.php" class="link-button">Portfolio</a>
+        <a href="my_assets.php" class="link-button">Assets</a>
+        <a href="https://www.youtube.com/@xvriez" class="link-button" target="_blank">YouTube</a>
+        <a href="#" class="link-button">Instagram</a>
+        <a href="#" class="link-button">Discord</a>
+    </div>
+
+    <div class="info-widget">
+        <div id="clock"></div>
+        <div id="weather">Memuat cuaca...</div>
+    </div>
+
+    <script>
+        // --- PERUBAHAN SCRIPT DIMULAI DI SINI ---
+
+        // --- Script untuk Navigasi Interaktif ---
+        const navContainer = document.querySelector('.interactive-nav');
+        const navButtons = document.querySelectorAll('.interactive-nav .link-button'); // Ambil semua tombol
+
+        // Saat mouse masuk ke area nav, aktifkan menu
+        navContainer.addEventListener('mouseenter', () => {
+            navContainer.classList.add('triggered');
+        });
+
+        // Saat klik di luar area nav, nonaktifkan menu dan reset tombol
+        document.addEventListener('click', (event) => {
+            if (!navContainer.contains(event.target) && navContainer.classList.contains('triggered')) {
+                navContainer.classList.remove('triggered');
+                // Hapus class 'active' dari semua tombol saat menu ditutup
+                navButtons.forEach(button => {
+                    button.classList.remove('active');
+                });
+            }
+        });
+        
+        // Logika untuk mengubah status 'active' pada tombol
+        navButtons.forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                // Pastikan fungsi ini hanya berjalan saat menu terbuka
+                if (navContainer.classList.contains('triggered')) {
+                    // Hapus dulu class 'active' dari tombol lain
+                    navButtons.forEach(otherButton => {
+                        if (otherButton !== button) {
+                            otherButton.classList.remove('active');
+                        }
+                    });
+                    // Tambahkan class 'active' ke tombol yang sedang ditunjuk
+                    button.classList.add('active');
+                }
+            });
+        });
+
+        // --- PERUBAHAN SCRIPT SELESAI ---
+        
+        // --- Script untuk Jam dan Cuaca (GRATIS & STABIL DENGAN EMOJI) ---
+        
+        // --- Fungsi untuk Jam ---
+        function updateClock() {
+            const clockElement = document.getElementById('clock');
+            if (clockElement) {
+                const now = new Date();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+            }
+        }
+
+        // --- Fungsi untuk Cuaca ---
+        async function getWeather() {
+            const weatherElement = document.getElementById('weather');
+            const latitude = -2.9761;
+            const longitude = 104.7754;
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Gagal mengambil data cuaca.');
+                
+                const data = await response.json();
+                const temp = Math.round(data.current.temperature_2m);
+                const weatherCode = data.current.weather_code;
+                
+                const { description, emoji } = getWeatherDetails(weatherCode);
+
+                weatherElement.innerHTML = `
+                    <span id="weather-icon-emoji">${emoji}</span>
+                    <div>
+                        <span>${temp}°C, ${description}</span><br>
+                        <span>Palembang</span>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('Error fetching weather:', error);
+                weatherElement.textContent = 'Gagal memuat cuaca.';
+            }
+        }
+
+        function getWeatherDetails(code) {
+            let description, emoji;
+
+            if (code === 0) { description = "Cerah"; emoji = "☀️"; }
+            else if (code === 1) { description = "Cerah Berawan"; emoji = "🌤️"; }
+            else if (code === 2) { description = "Berawan"; emoji = "☁️"; }
+            else if (code === 3) { description = "Sangat Berawan"; emoji = "🌥️"; }
+            else if (code >= 51 && code <= 55) { description = "Gerimis"; emoji = "🌦️"; }
+            else if (code >= 61 && code <= 65) { description = "Hujan"; emoji = "🌧️"; }
+            else if (code >= 80 && code <= 82) { description = "Hujan Deras"; emoji = "⛈️"; }
+            else if (code >= 95 && code <= 99) { description = "Badai Petir"; emoji = "🌩️"; }
+            else { description = "Berkabut"; emoji = "🌫️"; } // Default
+
+            return { description, emoji };
+        }
+
+
+        // --- Menjalankan Fungsi ---
+        updateClock();
+        getWeather();
+        setInterval(updateClock, 1000);
+    </script>
 
 </body>
 </html>
